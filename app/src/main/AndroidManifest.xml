@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pratham.atm">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <application
+        android:name="com.pratham.atm.AssessmentApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/assessment_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/assessment_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.science.certificate.AssessmentCertificateActivity_"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.result.ResultActivity_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.SupervisedAssessmentActivity_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity_"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.pratham.atm.ui.splash_activity.SplashActivity_"
+            android:screenOrientation="landscape"
+
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.ece.ECEActivity_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name=".CatchoTransparentActivity"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name="com.pratham.atm.ui.choose_assessment.ChooseAssessmentActivity_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name="com.pratham.atm.ui.login.MainActivity_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity
+            android:name="com.pratham.atm.admin_pannel.PushOrAssign.Activity_AssignGroups_"
+            android:screenOrientation="landscape"
+
+            />
+        <activity android:name="com.pratham.atm.BaseActivity" />
+        <activity
+            android:name="com.pratham.atm.ui.login.group_selection.SelectGroupActivity_"
+            android:screenOrientation="landscape"
+
+            />
+         <activity
+            android:name="com.pratham.atm.ui.content_player.WebViewActivity"
+            android:screenOrientation="sensorLandscape" />
+         <activity
+            android:name="com.pratham.atm.ui.login.qr_scan.QRScanActivity_"
+            android:screenOrientation="landscape"
+
+            />
+
+        <service
+            android:name="com.pratham.atm.services.AppExitService"
+            android:enabled="true"
+            android:stopWithTask="false" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <!-- <service
+             android:name=".services.BkgdVideoRecordingService"
+             android:exported="false" />-->
+    </application>
+</manifest>

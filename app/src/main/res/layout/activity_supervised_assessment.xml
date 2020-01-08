@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <!--  <TextView
+          android:id="@+id/tv_title"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/_40sdp"
+          android:layout_alignParentTop="true"
+          android:background="@color/colorPrimary"
+          android:gravity="center"
+          android:text="Select Test Mode"
+          android:textColor="@color/colorWhiteLight"
+          android:textSize="@dimen/_20sdp"
+          android:textStyle="bold|italic" />-->
+
+
+    <LinearLayout
+        android:id="@+id/rl_formLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/gradiance_bg"
+            android:scaleType="fitCenter"
+            android:src="@drawable/selfi_placeholder"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:elevation="@dimen/_7sdp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/supervisor_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:fontFamily="@font/quicksand_bold"
+                android:hint="Enter supervisor name"
+                android:singleLine="true"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_15sdp" />
+
+            <ImageButton
+                android:id="@+id/btn_camera"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/camera_ripple"
+                android:elevation="@dimen/_10sdp"
+                android:padding="@dimen/_5sdp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_photo_camera"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/ripple_effect"
+                android:padding="@dimen/_5sdp"
+                android:text="Submit"
+                android:textSize="@dimen/_15sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

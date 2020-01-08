@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppModalStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/main_card_bg"
+    android:paddingBottom="@dimen/_10sdp">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ll_indicators"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp">
+
+                <TextView
+                    android:id="@+id/tv_answered_color"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight=".8"
+                    android:background="@drawable/ripple_round_attempted"
+
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:id="@+id/tv_answered"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:gravity="center"
+                    android:text="Answered"
+                    android:textAlignment="textStart"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_not_answered_color"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="0.8"
+                    android:background="@drawable/ripple_round_not_attempted"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:id="@+id/tv_not_answered"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2sdp"
+
+                    android:layout_weight="3"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:gravity="center"
+                    android:text="Not Answered"
+                    android:textAlignment="textStart"
+
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_below="@+id/ll_indicators"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintTop_toBottomOf="@+id/ll_indicators"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_questions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view1"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="8dp"
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintTop_toBottomOf="@+id/view1"
+                tools:layout_editor_absoluteX="6dp" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_below="@+id/rv_questions"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ripple_effect"
+                android:text="save"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_18sdp"
+                app:layout_constraintTop_toBottomOf="@+id/rv_questions"
+                tools:layout_editor_absoluteX="0dp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

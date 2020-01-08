@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_2sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_question"
+            style="@style/CustomQuestionStyle"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_weight="0.7"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="@dimen/_20sdp"
+            app:autoSizeMinTextSize="@dimen/_12sdp"
+            android:text="What will be the change in quality be the change in quality?" />
+
+        <ImageView
+            android:id="@+id/iv_question_image"
+            style="@style/CustomQuestionImageStyle"
+            android:layout_weight="0.5" />
+
+        <com.pratham.atm.custom.gif_viewer.GifView
+            android:id="@+id/iv_question_gif"
+            style="@style/CustomQuestionImageStyle"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.5" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioGroup
+                    android:id="@+id/rg_mcq"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:orientation="vertical" />
+
+                <GridLayout
+                    android:id="@+id/grid_mcq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:alignmentMode="alignMargins"
+
+                    android:columnCount="2" />
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_zoom_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_warning"
+        android:visibility="gone" />
+</android.support.v7.widget.CardView>
