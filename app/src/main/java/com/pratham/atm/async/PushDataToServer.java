@@ -542,7 +542,7 @@ public class PushDataToServer {
 
 
     @UiThread
-    protected void onPostExecute(){
+    protected void onPostExecute() {
         // super.onPostExecute(o);
         if (!AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork()) {
             Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show();
@@ -816,6 +816,8 @@ public class PushDataToServer {
                     _obj_paper.put("question1Rating", _paper.getQuestion1Rating());
                     _obj_paper.put("question2Rating", _paper.getQuestion2Rating());
                     _obj_paper.put("question3Rating", _paper.getQuestion3Rating());
+                    _obj_paper.put("question4Rating", _paper.getQuestion4Rating());
+                    _obj_paper.put("question5Rating", _paper.getQuestion5Rating());
 //                    DownloadMedia video = AppDatabase.getDatabaseInstance(context).getDownloadMediaDao().getMediaByTypeAndPaperId(DOWNLOAD_MEDIA_TYPE_VIDEO_MONITORING, _paper.getPaperId());
 
                     /*  DownloadMedia video = new DownloadMedia();

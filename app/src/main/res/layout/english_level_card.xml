@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/level_card_view"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="@dimen/_15sdp"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_5sdp"
+    android:layout_marginHorizontal="@dimen/_15sdp"
     android:layout_marginVertical="@dimen/_8sdp"
-    app:cardCornerRadius="@dimen/_8sdp"
+    android:padding="@dimen/_5sdp"
     app:cardBackgroundColor="@color/transparent_white_btn"
+    app:cardCornerRadius="@dimen/_8sdp"
     app:cardElevation="@dimen/_3sdp"
     app:cardMaxElevation="@dimen/_5sdp">
 
@@ -22,17 +22,17 @@
             android:id="@+id/level_thumbnail"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_70sdp"
+            android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:foregroundGravity="center"
-            android:layout_centerVertical="true"
-            android:src="@drawable/pratham_logo"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/pratham_logo" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_70sdp"
-            android:layout_toRightOf="@id/level_thumbnail"
             android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_toRightOf="@id/level_thumbnail"
             android:gravity="center">
 
             <ImageView
@@ -40,26 +40,27 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_alignParentRight="true"
-                android:visibility="gone"
                 android:layout_centerVertical="true"
-                android:src="@drawable/download_icon"/>
+                android:src="@drawable/download_icon"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/level_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"        android:fontFamily="@font/quicksand_bold"
-
-                android:paddingBottom="5dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
                 android:layout_toLeftOf="@+id/iv_download_icon"
-                android:text="@string/app_name"
+                android:fontFamily="@font/quicksand_bold"
+
+                android:gravity="center"
+                android:paddingLeft="2dp"
                 android:paddingTop="5dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="5dp"
+                android:text="@string/app_name"
                 android:textSize="@dimen/_12sdp" />
 
         </RelativeLayout>
 
     </RelativeLayout>
 
-</android.support.design.card.MaterialCardView >
+</android.support.design.card.MaterialCardView>

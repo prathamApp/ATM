@@ -2,17 +2,21 @@ package com.pratham.atm;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.isupatches.wisefy.WiseFy;
 import com.pratham.atm.custom.FastSave;
+import com.pratham.atm.services.OnScreenOffReceiver;
 import com.pratham.atm.utilities.Assessment_Utility;
 
 import java.io.File;
@@ -30,6 +34,8 @@ import static com.pratham.atm.utilities.Assessment_Constants.PREFS_VERSION;
 
 public class AssessmentApplication extends Application {
 
+    private PowerManager.WakeLock wakeLock;
+    private OnScreenOffReceiver onScreenOffReceiver;
 
     public static final boolean isTablet = true;
 
@@ -70,6 +76,10 @@ public class AssessmentApplication extends Application {
         if (assessmentApplication == null) {
             assessmentApplication = this;
         }
+
+//        registerKioskModeScreenOffReceiver();
+
+
         FastSave.init(getApplicationContext());
 
         sharedPreferences = getSharedPreferences(PREFS_VERSION, Context.MODE_PRIVATE);
@@ -278,4 +288,21 @@ public class AssessmentApplication extends Application {
         contentSDPath = path;
     }
 
+   /* public void registerKioskModeScreenOffReceiver() {
+        // register screen off receiver
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+         onScreenOffReceiver = new OnScreenOffReceiver();
+        registerReceiver(onScreenOffReceiver, filter);
+    }*/
+
+  /*  public PowerManager.WakeLock getWakeLock() {
+        if(wakeLock == null) {
+            // lazy loading: first call, create wakeLock via PowerManager.
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//            wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "wakeup");
+        }
+        return wakeLock;
+    }*/
 }
+
+

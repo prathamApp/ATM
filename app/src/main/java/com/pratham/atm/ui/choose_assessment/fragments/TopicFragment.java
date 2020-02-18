@@ -28,6 +28,7 @@ import com.pratham.atm.domain.AssessmentTestModal;
 import com.pratham.atm.ui.choose_assessment.ChooseAssessmentActivity;
 import com.pratham.atm.utilities.APIs;
 import com.pratham.atm.utilities.Assessment_Constants;
+import com.pratham.atm.utilities.Assessment_Utility;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -36,6 +37,9 @@ import org.androidannotations.annotations.ViewById;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.pratham.atm.utilities.Assessment_Constants.LANGUAGE;
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
 
 /*import butterknife.BindView;
 import butterknife.ButterKnife;*/
@@ -148,9 +152,7 @@ public class TopicFragment extends Fragment {
         rv_topics.setAdapter(topicAdapter);
         topicAdapter.notifyDataSetChanged();
 
-        //todo change audio
-        instruction = MediaPlayer.create(getActivity(), R.raw.select_exam);
-        instruction.start();
+       Assessment_Utility.setInstruction(getActivity(),"select_exam_instruction");
     }
 
    /* @Override
@@ -180,5 +182,19 @@ public class TopicFragment extends Fragment {
             getActivity().getSupportFragmentManager().popBackStack();
             Toast.makeText(getActivity(), "Connect to internet to download exams", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+
     }
 }

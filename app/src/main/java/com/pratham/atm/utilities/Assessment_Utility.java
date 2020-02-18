@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -58,6 +59,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.pratham.atm.AssessmentApplication;
 import com.pratham.atm.R;
+import com.pratham.atm.custom.FastSave;
+import com.pratham.atm.domain.StorageInfo;
 import com.pratham.atm.ui.choose_assessment.ChooseAssessmentActivity;
 import com.pratham.atm.ui.choose_assessment.result.ResultActivity;
 import com.pratham.atm.ui.choose_assessment.science.certificate.AssessmentCertificateActivity;
@@ -75,6 +78,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -88,11 +92,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,11 +107,14 @@ import java.util.regex.Pattern;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import static com.pratham.atm.utilities.Assessment_Constants.LANGUAGE;
+
 
 public class Assessment_Utility {
     private static List<Integer> colors;
     public static Integer selectedColor = 0;
     public static ColorStateList colorStateList;
+    public static MediaPlayer mediaPlayer;
 
 
     public Assessment_Utility() {
@@ -1829,5 +1839,93 @@ public class Assessment_Utility {
         String[] splitted = fileName.split("\\.");
         extension = splitted[splitted.length - 1];
         return extension;
+    }
+
+    public static void setInstruction(Context context,String instruction){
+        String language = FastSave.getInstance().getString(LANGUAGE, "1");
+
+        String audio = "en_" + instruction;
+        int rawID = 0;
+
+        switch (language) {
+            case "1":
+                audio = "en_" + instruction;
+                break;
+            case "2":
+                audio = "hi_" + instruction;
+                break;
+            case "3":
+                audio = "mr_" + instruction;
+                break;
+        }
+        rawID = context.getResources().getIdentifier(audio.toLowerCase(), "raw", context.getPackageName());
+
+        if (rawID != 0) {
+            mediaPlayer = MediaPlayer.create(context, rawID);
+            mediaPlayer.start();
+        }
+    }
+
+    public static List<StorageInfo> getStorageList() {
+        List<StorageInfo> list = new ArrayList<StorageInfo>();
+        String def_path = Environment.getExternalStorageDirectory().getPath();
+        boolean def_path_removable = Environment.isExternalStorageRemovable();
+        String def_path_state = Environment.getExternalStorageState();
+        boolean def_path_available = def_path_state.equals(Environment.MEDIA_MOUNTED)
+                || def_path_state.equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+        boolean def_path_readonly = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+
+        HashSet<String> paths = new HashSet<String>();
+        int cur_removable_number = 1;
+
+        if (def_path_available) {
+            paths.add(def_path);
+            list.add(0, new StorageInfo(def_path, def_path_readonly, def_path_removable, def_path_removable ? cur_removable_number++ : -1));
+        }
+
+        BufferedReader buf_reader = null;
+        try {
+            buf_reader = new BufferedReader(new FileReader("/proc/mounts"));
+            String line;
+            Log.d(TAG, "/proc/mounts");
+            while ((line = buf_reader.readLine()) != null) {
+                Log.d(TAG, line);
+                if (line.contains("vfat") || line.contains("/mnt")) {
+                    StringTokenizer tokens = new StringTokenizer(line, " ");
+                    String unused = tokens.nextToken(); //device
+                    String mount_point = tokens.nextToken(); //mount point
+                    if (paths.contains(mount_point)) {
+                        continue;
+                    }
+                    unused = tokens.nextToken(); //file system
+                    List<String> flags = Arrays.asList(tokens.nextToken().split(",")); //flags
+                    boolean readonly = flags.contains("ro");
+
+                    if (line.contains("/dev/block/vold")) {
+                        if (!line.contains("/mnt/secure")
+                                && !line.contains("/mnt/asec")
+                                && !line.contains("/mnt/obb")
+                                && !line.contains("/dev/mapper")
+                                && !line.contains("tmpfs")) {
+                            paths.add(mount_point);
+                            list.add(new StorageInfo(mount_point, readonly, true, cur_removable_number++));
+                        }
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (buf_reader != null) {
+                try {
+                    buf_reader.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+        return list;
     }
 }

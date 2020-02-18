@@ -34,6 +34,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
+
 /*import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;*/
@@ -60,9 +62,7 @@ public class MenuFragment extends Fragment {
         if (!FastSave.getInstance().getBoolean(Assessment_Constants.VOICES_DOWNLOAD_INTENT, false))
             show_STT_Dialog();
         else {
-            //todo change audio
-            instruction = MediaPlayer.create(getActivity(), R.raw.mark_attendance);
-            instruction.start();
+            Assessment_Utility.setInstruction(getActivity(), "select_age_group_instruction");
         }
     }
 
@@ -246,10 +246,25 @@ public class MenuFragment extends Fragment {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Assessment_Utility.setInstruction(getActivity(), "select_age_group_instruction");
                 FastSave.getInstance().saveBoolean(Assessment_Constants.VOICES_DOWNLOAD_INTENT, true);
                 dialog.dismiss();
             }
         });
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
 
     }
 

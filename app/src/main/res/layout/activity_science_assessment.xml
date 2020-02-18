@@ -87,7 +87,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/rl_nav"
-        android:background="@color/green"
         android:visibility="gone"
         tools:context=".ui.choose_assessment.science.ScienceAssessmentActivity">
 
@@ -95,22 +94,126 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <View
-                android:id="@+id/view_bg_1"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.4"
-                 />
+                android:layout_weight="0.4">
+
+                <com.pratham.atm.custom.ShadowLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sl_shadow_angle="30"
+                    app:sl_shadow_color="@color/secondaryText"
+                    app:sl_shadow_distance="4dp"
+                    app:sl_shadow_radius="5dp"
+                    app:sl_shadowed="true">
+
+                    <LinearLayout
+                        android:id="@+id/view_bg_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:elevation="@dimen/_30sdp"
+                        android:gravity="end">
+
+                        <LinearLayout
+                            android:id="@+id/ll_que_cnt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp">
+
+                            <TextView
+                                android:id="@+id/txt_question_cnt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:fontFamily="@font/quicksand_bold"
+                                android:gravity="end"
+                                android:text=""
+                                android:textColor="@color/colorWhiteDark"
+                                android:textSize="@dimen/_11sdp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.pratham.atm.custom.ShadowLayout>
+                <!--   <View
+                       android:id="@+id/line"
+                       android:layout_height="match_parent"
+                       android:layout_width="@dimen/_1sdp"
+                       android:background="#3E000000"
+                       android:layout_alignParentEnd="true"
+                       android:elevation="@dimen/_30sdp" />-->
+            </RelativeLayout>
+
 
             <View
                 android:id="@+id/view_bg_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6"
-                android:background="#1B000000"
-                />
+                android:background="#0F000000"
+                android:elevation="0dp" />
 
         </LinearLayout>
+        <!--#1B000000-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/frame_video_monitoring"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:visibility="visible">
+                <!--android:background="@drawable/ripple_round"-->
+
+
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/tickerView"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/custom_radio_button"
+                    android:elevation="@dimen/_3sdp"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:padding="@dimen/_5sdp"
+                    android:text="00:00"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="visible"
+                    app:ticker_animationDuration="300"
+                    app:ticker_defaultPreferredScrollingDirection="any" />
+
+                <TextureView
+                    android:id="@+id/texture_view"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_below="@+id/tickerView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:elevation="@dimen/_2sdp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_timer"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:background="@drawable/ripple_rectangle"
+                    android:elevation="@dimen/_5sdp"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text="00:00"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
 
         <com.pratham.atm.custom.dots_indicator.WormDotsIndicator
             android:id="@+id/dots_indicator"
@@ -118,6 +221,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
             app:dotsColor="@color/white"
             app:dotsCornerRadius="5dp"
             app:dotsSize="10dp"
@@ -133,140 +237,138 @@
             android:layout_below="@+id/dots_indicator"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
+            <!--<android.support.v4.view.ViewPager
+                android:id="@+id/fragment_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />  -->
+            <com.pratham.atm.custom.custom_view_pager.VerticalViewPager
                 android:id="@+id/fragment_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/_2sdp">
 
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:layout_weight="1.4">
 
-            <ImageView
-                android:id="@+id/iv_prev"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:background="@drawable/ripple_round"
-                android:src="@drawable/ic_left_arrow"
-                android:visibility="visible" />
-            <!--</FrameLayout>-->
-
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_centerInParent="true"
-                android:indeterminate="false"
-                android:max="100"
-                android:progress="100"
-                android:progressDrawable="@drawable/circle_progress_background"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/btn_save_Assessment"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:background="@drawable/ripple_round"
-                android:src="@drawable/ic_right_arrow"
-                android:textStyle="bold" />
-
-
-            <FrameLayout
-                android:id="@+id/frame_video_monitoring"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:visibility="visible">
-                <!--android:background="@drawable/ripple_round"-->
-
-                <TextureView
-                    android:id="@+id/texture_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:elevation="@dimen/_2sdp"
-                    android:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/tv_timer"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/iv_prev"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="@drawable/ripple_rectangle"
-                    android:elevation="@dimen/_3sdp"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:text="00:00"
-                    android:textAlignment="center"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/light_bg"
+                    android:elevation="@dimen/_5sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Previous Question"
+                    android:textColor="@color/black"
+                    android:visibility="visible" />
+                <!--</FrameLayout>-->
+            </RelativeLayout>
+
+
+            <!--            <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_150sdp"
+                            android:layout_centerInParent="true"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="100"
+                            android:progressDrawable="@drawable/circle_progress_background"
+                            android:visibility="gone" />-->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/btn_save_Assessment"
+                    android:background="@drawable/ripple_effect"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Submit"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_save_Assessment"
+                    android:layout_toLeftOf="@id/btn_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/shape_scrolling_view_checked"
+                    android:elevation="@dimen/_5sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Next Question"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_13sdp" />
-            </FrameLayout>
+                    android:textStyle="bold" />
 
-            <ProgressBar
-                android:id="@+id/timer_progress_bar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_centerInParent="true"
-                android:indeterminate="false"
-                android:layoutDirection="rtl"
-                android:max="100"
-                android:progress="0"
-                android:progressDrawable="@drawable/circle_progress_foreground"
-                android:rotation="90"
-                android:visibility="gone" />
+                <ImageButton
+                    android:id="@+id/btn_next"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:src="@drawable/ic_right_arrow"/>
+            </RelativeLayout>
 
-            <com.pratham.atm.custom.circular_progress_view.CircleView
-                android:id="@+id/circle_view"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_centerInParent="true"
-                android:visibility="gone"
-                app:arcColor="@color/light_gray"
-                app:arcHasBorder="false"
-                app:arcWidth="@dimen/_5sdp"
-                app:clockwise="false"
-                app:enabled="false"
-                app:hasIndicator="true"
-                app:indicatorColor="@color/black"
-                app:indicatorRadius="5"
-                app:progressColor="@color/black"
-                app:progressCurrentValue="0"
-                app:progressStepValue="1"
-                app:progressWidth="@dimen/_5sdp"
-                app:textEnabled="false" />
+            <!--            <ProgressBar
+                            android:id="@+id/timer_progress_bar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_150sdp"
+                            android:layout_centerInParent="true"
+                            android:indeterminate="false"
+                            android:layoutDirection="rtl"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/circle_progress_foreground"
+                            android:rotation="90"
+                            android:visibility="gone" />-->
 
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_50sdp"
-                android:layout_toEndOf="@id/frame_video_monitoring"
-                android:background="@drawable/ripple_effect"
-                android:padding="@dimen/_5sdp"
-                android:text="Submit"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone" />
+            <!-- <com.pratham.atm.custom.circular_progress_view.CircleView
+                 android:id="@+id/circle_view"
+                 android:layout_width="@dimen/_80sdp"
+                 android:layout_height="@dimen/_80sdp"
+                 android:layout_centerInParent="true"
+                 android:visibility="gone"
+                 app:arcColor="@color/light_gray"
+                 app:arcHasBorder="false"
+                 app:arcWidth="@dimen/_5sdp"
+                 app:clockwise="false"
+                 app:enabled="false"
+                 app:hasIndicator="true"
+                 app:indicatorColor="@color/black"
+                 app:indicatorRadius="5"
+                 app:progressColor="@color/black"
+                 app:progressCurrentValue="0"
+                 app:progressStepValue="1"
+                 app:progressWidth="@dimen/_5sdp"
+                 app:textEnabled="false" />-->
+
 
             <!--</FrameLayout>-->
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

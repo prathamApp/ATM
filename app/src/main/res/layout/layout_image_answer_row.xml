@@ -27,6 +27,7 @@
                 app:autoSizeTextType="uniform"
                 app:autoSizeMaxTextSize="@dimen/_20sdp"
                 app:autoSizeMinTextSize="@dimen/_12sdp"
+                android:autoSizeTextType="uniform"
                 android:layout_weight="0.5" />
 
             <ImageView

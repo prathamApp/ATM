@@ -66,4 +66,8 @@ public interface ScoreDao {
 
     @Query("select * from Score where sentFlag = 0 AND SessionID=:sessionID")
     List<Score> getAllNewScoresBySession(String sessionID);
+
+    @Query("Select count(distinct REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(substr(startdatetime,1,instr(startdatetime,' ')),'01','1'),'02','2'),'03','3'),'04','4'),'05','5'),'06','6'),'07','7'),'08','8'),'09','9')) as dates from Score sc where length(startdatetime)>5")
+    int getTotalActiveDeviceDays();
+
 }

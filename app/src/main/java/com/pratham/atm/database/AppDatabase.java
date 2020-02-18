@@ -1,9 +1,13 @@
 package com.pratham.atm.database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.pratham.atm.dao.AssessmentDao;
 import com.pratham.atm.dao.AssessmentPaperForPushDao;
@@ -56,7 +60,7 @@ import com.pratham.atm.domain.Village;
         ContentTable.class, AssessmentToipcsModal.class, ScienceQuestion.class,
         ScienceQuestionChoice.class, AssessmentSubjects.class, AssessmentLanguages.class,
         AssessmentTest.class, AssessmentPaperForPush.class,
-        AssessmentPaperPattern.class, AssessmentPatternDetails.class, SupervisorData.class, DownloadMedia.class}, version = 1)
+        AssessmentPaperPattern.class, AssessmentPatternDetails.class, SupervisorData.class, DownloadMedia.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase appDatabase;
 
@@ -120,9 +124,31 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getDatabaseInstance(Context context) {
         if (appDatabase == null)
-            appDatabase = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "assessment_database")/*.addMigrations(MIGRATION_1_2)*/.allowMainThreadQueries().build();
+            appDatabase = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "assessment_database")
+                    .addMigrations(MIGRATION_1_2)
+                    .allowMainThreadQueries().build();
         return appDatabase;
     }
+
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            Log.d("$$$", "MIGRATION_1_2");
+            try {
+
+                database.execSQL("ALTER TABLE AssessmentPaperForPush add COLUMN question4Rating text");
+                database.execSQL("ALTER TABLE AssessmentPaperForPush add COLUMN question5Rating text");
+                database.execSQL("ALTER TABLE AssessmentPaperPattern add COLUMN certificateQuestion4 text");
+                database.execSQL("ALTER TABLE AssessmentPaperPattern add COLUMN certificateQuestion5 text");
+                Log.d("$$$", "MIGRATION_1_3After");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
 
 
     /* static final Migration MIGRATION_1_2 = new Migration(1, 2) {

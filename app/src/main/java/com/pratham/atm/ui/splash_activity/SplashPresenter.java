@@ -236,9 +236,11 @@ public class SplashPresenter implements SplashContract.SplashPresenter {
                                         detail.setQuestion1Rating(content_cursor.getString(content_cursor.getColumnIndex("question1Rating")));
                                         detail.setQuestion2Rating(content_cursor.getString(content_cursor.getColumnIndex("question2Rating")));
                                         detail.setQuestion3Rating(content_cursor.getString(content_cursor.getColumnIndex("question3Rating")));
-                                        detail.setQuestion3Rating(content_cursor.getString(content_cursor.getColumnIndex("FullName")));
-                                        detail.setQuestion3Rating(content_cursor.getString(content_cursor.getColumnIndex("Gender")));
-                                        detail.setQuestion3Rating(content_cursor.getString(content_cursor.getColumnIndex("Age")));
+                                        detail.setQuestion4Rating(content_cursor.getString(content_cursor.getColumnIndex("question4Rating")));
+                                        detail.setQuestion5Rating(content_cursor.getString(content_cursor.getColumnIndex("question5Rating")));
+                                        detail.setFullName(content_cursor.getString(content_cursor.getColumnIndex("FullName")));
+                                        detail.setGender(content_cursor.getString(content_cursor.getColumnIndex("Gender")));
+                                        detail.setAge(content_cursor.getInt(content_cursor.getColumnIndex("Age")));
                                         detail.setSentFlag(content_cursor.getInt(content_cursor.getColumnIndex("sentFlag")));
                                         contents.add(detail);
                                         content_cursor.moveToNext();

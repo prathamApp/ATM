@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,11 +22,8 @@ import com.pratham.atm.R;
 import com.pratham.atm.domain.ScienceQuestionChoice;
 import com.pratham.atm.ui.choose_assessment.science.ItemMoveCallback;
 import com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity;
-import com.pratham.atm.ui.choose_assessment.science.custom_dialogs.ZoomImageDialog;
 import com.pratham.atm.ui.choose_assessment.science.interfaces.AssessmentAnswerListener;
-import com.pratham.atm.ui.choose_assessment.science.interfaces.DragDropListener;
 import com.pratham.atm.ui.choose_assessment.science.interfaces.StartDragListener;
-import com.pratham.atm.ui.choose_assessment.science.viewpager_fragments.ArrangeSequenceFragment;
 import com.pratham.atm.ui.choose_assessment.science.viewpager_fragments.MatchThePairFragment;
 import com.pratham.atm.utilities.Assessment_Constants;
 import com.pratham.atm.utilities.Assessment_Utility;
@@ -34,11 +32,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
+public class MatchPairDragDropAdapter extends RecyclerView.Adapter<MatchPairDragDropAdapter.MyViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
     List<ScienceQuestionChoice> draggedList = new ArrayList<>();
     private List<ScienceQuestionChoice> data;
     Context context;
-    DragDropListener dragDropListener;
+    //    DragDropListener dragDropListener;
     //    QuestionTypeListener questionTypeListener;
     StartDragListener startDragListener;
     AssessmentAnswerListener assessmentAnswerListener;
@@ -47,8 +45,9 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
-        ImageView iv_choice_image;
+        ImageView iv_choice_image, iv_zoom_eye;
         View rowView;
+        RelativeLayout rl_img;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -56,10 +55,12 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
             rowView = itemView;
             mTitle = itemView.findViewById(R.id.tv_text);
             iv_choice_image = itemView.findViewById(R.id.iv_choice_image);
+            iv_zoom_eye = itemView.findViewById(R.id.iv_zoom_eye);
+            rl_img = itemView.findViewById(R.id.rl_img);
         }
     }
 
-    public DragDropAdapter(MatchThePairFragment fragment, List<ScienceQuestionChoice> data, Context context) {
+    public MatchPairDragDropAdapter(MatchThePairFragment fragment, List<ScienceQuestionChoice> data, Context context) {
         this.data = data;
         this.context = context;
 //        questionTypeListener = scienceAdapter;
@@ -67,14 +68,6 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
         assessmentAnswerListener = (ScienceAssessmentActivity) context;
     }
 
-    public DragDropAdapter(ArrangeSequenceFragment fragment, List<ScienceQuestionChoice> data, Context context) {
-        this.data = data;
-        this.context = context;
-//        questionTypeListener = scienceAdapter;
-        startDragListener = fragment;
-        assessmentAnswerListener = (ScienceAssessmentActivity) context;
-
-    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -92,11 +85,12 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
             if (!scienceQuestionChoice.getMatchingurl().equalsIgnoreCase("")) {
                 final String path = /*Assessment_Constants.loadOnlineImagePath +*/ scienceQuestionChoice.getMatchingurl();
 
-                String fileName = Assessment_Utility.getFileName(scienceQuestionChoice.getQid(), scienceQuestionChoice.getChoiceurl());
+                String fileName = Assessment_Utility.getFileName(scienceQuestionChoice.getQid(), scienceQuestionChoice.getMatchingurl());
                 final String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
 
 
-                holder.iv_choice_image.setVisibility(View.VISIBLE);
+//                holder.iv_choice_image.setVisibility(View.VISIBLE);
+                holder.rl_img.setVisibility(View.VISIBLE);
                 holder.mTitle.setVisibility(View.GONE);
                 holder.mTitle.setTextColor(Color.WHITE);
                 Glide.with(context).asBitmap().
@@ -106,14 +100,20 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
                         .override(Target.SIZE_ORIGINAL))
                         .into(holder.iv_choice_image);
 
-                holder.iv_choice_image.setOnClickListener(new View.OnClickListener() {
+//                holder.iv_choice_image.setOnClickListener(new View.OnClickListener() {
+                holder.iv_zoom_eye.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ZoomImageDialog zoomImageDialog = new ZoomImageDialog(context, path, localPath);
-                        zoomImageDialog.show();
+                        Log.d("QQQ", "choice clicked....");
+                      /*  ZoomImageDialog zoomImageDialog = new ZoomImageDialog(context, path, localPath);
+                        zoomImageDialog.show();*/
+                        Assessment_Utility.showZoomDialog(context, path, localPath);
                     }
                 });
-            } else holder.mTitle.setText(scienceQuestionChoice.getMatchingname());
+            } else {
+                holder.rl_img.setVisibility(View.GONE);
+                holder.mTitle.setText(scienceQuestionChoice.getMatchingname());
+            }
 
             holder.mTitle.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -126,7 +126,8 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
                 }
             });
 
-            holder.iv_choice_image.setOnTouchListener(new View.OnTouchListener() {
+//            holder.iv_choice_image.setOnTouchListener(new View.OnTouchListener() {
+            holder.rl_img.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() ==
@@ -149,6 +150,7 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
                         .targetView(holder.itemView).show();
             }*/
         }
+
     }
 
 
@@ -187,7 +189,7 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
     }
 
     @Override
-    public void onRowSelected(MyViewHolder myViewHolder) {
+    public void onRowSelected(MatchPairDragDropAdapter.MyViewHolder myViewHolder) {
 //       myViewHolder.rowView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ripple_rectangle));
         /*  myViewHolder.mTitle.setTextColor(Assessment_Utility.selectedColor);
          */
@@ -196,10 +198,20 @@ public class DragDropAdapter extends RecyclerView.Adapter<DragDropAdapter.MyView
     }
 
     @Override
-    public void onRowClear(MyViewHolder myViewHolder) {
+    public void onRowSelected(ArrangeSeqDragDropAdapter.MyViewHolder myViewHolder) {
+
+    }
+
+    @Override
+    public void onRowClear(MatchPairDragDropAdapter.MyViewHolder myViewHolder) {
 //        myViewHolder.rowView.setBackgroundColor(Color.WHITE);
        /* myViewHolder.rowView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.gradient_selector));
         myViewHolder.mTitle.setTextColor(Assessment_Utility.selectedColor);*/
+
+    }
+
+    @Override
+    public void onRowClear(ArrangeSeqDragDropAdapter.MyViewHolder myViewHolder) {
 
     }
 }

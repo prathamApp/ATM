@@ -18,6 +18,7 @@ import com.pratham.atm.database.AppDatabase;
 import com.pratham.atm.domain.AssessmentLanguages;
 import com.pratham.atm.ui.choose_assessment.ChooseAssessmentActivity;
 import com.pratham.atm.utilities.APIs;
+import com.pratham.atm.utilities.Assessment_Utility;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
 
 
 @EFragment(R.layout.fragment_language)
@@ -82,9 +85,7 @@ public class LanguageFragment extends Fragment {
         rvLanguage.setLayoutManager(linearLayoutManager);
         rvLanguage.setAdapter(adapter);
 
-        //todo change audio
-        instruction = MediaPlayer.create(getActivity(), R.raw.select_language);
-        instruction.start();
+        Assessment_Utility.setInstruction(getActivity(),"select_language_instruction");
     }
 
   /*  @Override
@@ -158,4 +159,18 @@ public class LanguageFragment extends Fragment {
             } else setLanguageRecyclerView();
         }
     }*/
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+
+    }
 }

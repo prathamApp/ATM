@@ -1,6 +1,7 @@
 package com.pratham.atm.ui.choose_assessment.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.card.MaterialCardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pratham.atm.R;
+import com.pratham.atm.custom.FastSave;
 import com.pratham.atm.domain.AssessmentTest;
 import com.pratham.atm.ui.choose_assessment.ChoseAssessmentClicked;
 import com.pratham.atm.utilities.Assessment_Utility;
@@ -54,6 +56,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final AssessmentTest assessmentTest = assessmentTests.get(i);
+
 
         myViewHolder.title.setText(assessmentTest.getExamname());
         myViewHolder.game_card_view.setCardBackgroundColor(Assessment_Utility.getRandomColorGradient());

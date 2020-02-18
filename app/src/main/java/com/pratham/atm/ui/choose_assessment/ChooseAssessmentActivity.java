@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -63,6 +64,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
 import static com.pratham.atm.utilities.Assessment_Constants.LANGUAGE;
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
 
 @EActivity(R.layout.activity_choose_assessment)
 public class ChooseAssessmentActivity extends BaseActivity implements
@@ -109,6 +111,7 @@ public class ChooseAssessmentActivity extends BaseActivity implements
         View view = navigation.getHeaderView(0);
         TextView name = view.findViewById(R.id.userName);
         name.setText(studentName);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Assessment_Constants.SELECTED_LANGUAGE = FastSave.getInstance().getString(LANGUAGE, "1");
 
@@ -440,9 +443,8 @@ public class ChooseAssessmentActivity extends BaseActivity implements
         });
         Log.d("sorted", contentTableList.toString());
 
-        //todo change audio
-        instruction = MediaPlayer.create(this, R.raw.select_subject);
-        instruction.start();
+        Assessment_Utility.setInstruction(this,"select_subject_instruction");
+
     }
 
     @Override
@@ -718,4 +720,18 @@ public class ChooseAssessmentActivity extends BaseActivity implements
                 });
 
     }*/
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+
+    }
 }

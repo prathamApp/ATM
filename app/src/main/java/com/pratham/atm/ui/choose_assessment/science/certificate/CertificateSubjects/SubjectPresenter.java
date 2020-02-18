@@ -121,6 +121,8 @@ public class SubjectPresenter implements SubjectContract.SubjectPresenter {
                                 paper.setQuestion1Rating(response.getJSONObject(i).getString("question1Rating"));
                                 paper.setQuestion2Rating(response.getJSONObject(i).getString("question2Rating"));
                                 paper.setQuestion3Rating(response.getJSONObject(i).getString("question3Rating"));
+                                paper.setQuestion4Rating(response.getJSONObject(i).getString("question4Rating"));
+                                paper.setQuestion5Rating(response.getJSONObject(i).getString("question5Rating"));
                                 paperList.add(paper);
 
                             }

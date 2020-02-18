@@ -27,13 +27,13 @@ import com.pratham.atm.utilities.Assessment_Utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.ARRANGE_SEQUENCE;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.FILL_IN_THE_BLANK;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.IMAGE_ANSWER;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.KEYWORDS_QUESTION;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.MATCHING_PAIR;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.MULTIPLE_CHOICE;
-import static com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity.MULTIPLE_SELECT;
+import static com.pratham.atm.utilities.Assessment_Constants.ARRANGE_SEQUENCE;
+import static com.pratham.atm.utilities.Assessment_Constants.FILL_IN_THE_BLANK;
+import static com.pratham.atm.utilities.Assessment_Constants.IMAGE_ANSWER;
+import static com.pratham.atm.utilities.Assessment_Constants.KEYWORDS_QUESTION;
+import static com.pratham.atm.utilities.Assessment_Constants.MATCHING_PAIR;
+import static com.pratham.atm.utilities.Assessment_Constants.MULTIPLE_CHOICE;
+import static com.pratham.atm.utilities.Assessment_Constants.MULTIPLE_SELECT;
 import static com.pratham.atm.utilities.Assessment_Utility.getFileName;
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.MyViewHolder> {

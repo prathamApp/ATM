@@ -27,6 +27,7 @@ import com.pratham.atm.domain.SupervisorData;
 import com.pratham.atm.ui.choose_assessment.ece.ECEActivity_;
 import com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity_;
 import com.pratham.atm.utilities.Assessment_Constants;
+import com.pratham.atm.utilities.Assessment_Utility;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -64,10 +65,8 @@ public class SupervisedAssessmentActivity extends BaseActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        supervisorId = getIntent().getStringExtra("crlId");
         supervisorId = "" + AssessmentApplication.getUniqueID();
+        Assessment_Utility.setInstruction(this, "type_supervisor_name_instruction");
 
-        //todo change audio
-        instruction = MediaPlayer.create(this, R.raw.capture_supervisors_photo);
-        instruction.start();
 
 //        subId = getIntent().getStringExtra("subId");
         if (Assessment_Constants.SELECTED_SUBJECT.equals("ece")) {

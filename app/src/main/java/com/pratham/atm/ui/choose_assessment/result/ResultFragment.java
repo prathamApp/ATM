@@ -29,6 +29,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
+
 /*import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;*/
@@ -118,6 +120,8 @@ public class ResultFragment extends Fragment implements ResultListener {
             }
         });
 
+        Assessment_Utility.setInstruction(getActivity(),"check_result_instruction");
+
     }
 
     /*  @Override
@@ -204,6 +208,20 @@ public class ResultFragment extends Fragment implements ResultListener {
         if (visibility)
             btn_done.setVisibility(View.VISIBLE);
         else btn_done.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
 
     }
 }

@@ -29,7 +29,7 @@
     <color name="green">#07992F</color>
     <color name="colorBtnRedLight">#e57373</color>
     <color name="colorBtnRedDark">#e53935</color>
-
+    <color name="colorBlackTransparentLight">#b2000000</color>
 
     <color name="colorProgress">#FDA520</color>
     <color name="colorProgress50">#FF8832</color>
@@ -43,5 +43,22 @@
     <color name="proswipebtn_red">#F15824</color>
     <color name="proswipebtn_disabled_grey">#939393</color>
 
+
+
+    <color name="vertical_stepper_form_background_color_disabled_elements">#c8c8c8</color>
+    <color name="vertical_stepper_form_background_color_circle">#1976d2</color>
+    <color name="vertical_stepper_form_background_color_next_button">#1976d2</color>
+    <color name="vertical_stepper_form_background_color_next_button_pressed">#004ba0</color>
+    <color name="vertical_stepper_form_background_color_cancel_button">#9b9b9b</color>
+    <color name="vertical_stepper_form_background_color_cancel_button_pressed">#878787</color>
+    <color name="vertical_stepper_form_background_color_bottom_navigation">#f0f0f0</color>
+    <color name="vertical_stepper_form_text_color_circle">#ffffff</color>
+    <color name="vertical_stepper_form_text_color_title">#212121</color>
+    <color name="vertical_stepper_form_text_color_subtitle">#9b9b9b</color>
+    <color name="vertical_stepper_form_text_color_next_button">#ffffff</color>
+    <color name="vertical_stepper_form_text_color_next_button_pressed">#ffffff</color>
+    <color name="vertical_stepper_form_text_color_cancel_button">#ffffff</color>
+    <color name="vertical_stepper_form_text_color_cancel_button_pressed">#ffffff</color>
+    <color name="vertical_stepper_form_text_color_error_message">#af1212</color>
 
 </resources>

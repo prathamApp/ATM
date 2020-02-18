@@ -1,6 +1,7 @@
 package com.pratham.atm.ui.choose_assessment.science.viewpager_fragments;
 
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -27,9 +28,9 @@ import org.androidannotations.annotations.ViewById;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-//import butterknife.BindView;
-
 import static com.pratham.atm.utilities.Assessment_Utility.getFileName;
+
+//import butterknife.BindView;
 
 @EFragment(R.layout.layout_true_false_row)
 public class TrueFalseFragment extends Fragment {
@@ -164,11 +165,22 @@ public class TrueFalseFragment extends Fragment {
 //                questionTypeListener.setAnswer("", radioButtonTrue.getText().toString(), scienceQuestion.getQid(), null);
                 assessmentAnswerListener.setAnswerInActivity("", radioButtonTrue.getText().toString(), scienceQuestion.getQid(), null);
                 radioButtonTrue.setSelected(true);
-                radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
+              /*  radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
                 radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle));
-                radioButtonTrue.setTextColor(Assessment_Utility.selectedColor);
+             */
+
+
+
+                radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
+//                radioButtonTrue.setTextColor(Assessment_Utility.selectedColor);
                 radioButtonFalse.setSelected(false);
-                radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.white));
+                radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.black));
+
+
+                radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                GradientDrawable bgShape = (GradientDrawable) radioButtonTrue.getBackground();
+                bgShape.setStroke(10, Assessment_Utility.selectedColor);
             }
         });
 
@@ -178,11 +190,20 @@ public class TrueFalseFragment extends Fragment {
                 assessmentAnswerListener.setAnswerInActivity("", radioButtonFalse.getText().toString(), scienceQuestion.getQid(), null);
 //                questionTypeListener.setAnswer("", radioButtonFalse.getText().toString(), scienceQuestion.getQid(), null);
                 radioButtonFalse.setSelected(true);
-                radioButtonFalse.setTextColor(Assessment_Utility.selectedColor);
+//                radioButtonFalse.setTextColor(Assessment_Utility.selectedColor);
                 radioButtonTrue.setSelected(false);
-                radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle));
+               /* radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle));
                 radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
-                radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.white));
+               */
+
+                radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
+                radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.black));
+
+                radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                GradientDrawable bgShape = (GradientDrawable) radioButtonFalse.getBackground();
+                bgShape.setStroke(10, Assessment_Utility.selectedColor);
+
             }
         });
        /* rg_true_false.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -213,24 +234,30 @@ public class TrueFalseFragment extends Fragment {
             radioButtonTrue.setSelected(true);
             radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
             radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle));
-            radioButtonTrue.setTextColor(Assessment_Utility.selectedColor);
+//            radioButtonTrue.setTextColor(Assessment_Utility.selectedColor);
             radioButtonFalse.setSelected(false);
-            radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.white));
+//            radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.white));
+            radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+            GradientDrawable bgShape = (GradientDrawable) radioButtonTrue.getBackground();
+            bgShape.setStroke(10, Assessment_Utility.selectedColor);
 
 
         } else if (scienceQuestion.getUserAnswer().equalsIgnoreCase("false")) {
             radioButtonFalse.setSelected(true);
-            radioButtonFalse.setTextColor(Assessment_Utility.selectedColor);
+//            radioButtonFalse.setTextColor(Assessment_Utility.selectedColor);
             radioButtonTrue.setSelected(false);
             radioButtonTrue.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle));
             radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corner_dialog));
-            radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.white));
+//            radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.white));
+            radioButtonFalse.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+            GradientDrawable bgShape = (GradientDrawable) radioButtonFalse.getBackground();
+            bgShape.setStroke(10, Assessment_Utility.selectedColor);
 
         } else {
             radioButtonFalse.setSelected(false);
             radioButtonTrue.setSelected(false);
-            radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.white));
-            radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.white));
+            radioButtonTrue.setTextColor(getActivity().getResources().getColor(R.color.black));
+            radioButtonFalse.setTextColor(getActivity().getResources().getColor(R.color.black));
 
         }
 

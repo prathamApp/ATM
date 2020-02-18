@@ -30,6 +30,8 @@ public class AssessmentPaperForPush implements Serializable {
     String question1Rating;
     String question2Rating;
     String question3Rating;
+    String question4Rating;
+    String question5Rating;
 
     private String FullName;
     private String Gender;
@@ -202,7 +204,21 @@ public class AssessmentPaperForPush implements Serializable {
     public void setQuestion3Rating(String question3Rating) {
         this.question3Rating = question3Rating;
     }
+    public String getQuestion4Rating() {
+        return question4Rating;
+    }
 
+    public void setQuestion4Rating(String question4Rating) {
+        this.question4Rating = question4Rating;
+    }
+
+    public String getQuestion5Rating() {
+        return question5Rating;
+    }
+
+    public void setQuestion5Rating(String question5Rating) {
+        this.question5Rating = question5Rating;
+    }
 
     public String getFullName() {
         return FullName;

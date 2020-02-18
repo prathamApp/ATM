@@ -1,17 +1,17 @@
 package com.pratham.atm.ui.choose_assessment.science.viewpager_fragments;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -21,14 +21,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.pratham.atm.AssessmentApplication;
 import com.pratham.atm.R;
+import com.pratham.atm.custom.FastSave;
 import com.pratham.atm.custom.gif_viewer.GifView;
 import com.pratham.atm.database.AppDatabase;
 import com.pratham.atm.domain.ScienceQuestion;
 import com.pratham.atm.domain.ScienceQuestionChoice;
 import com.pratham.atm.ui.choose_assessment.science.ScienceAssessmentActivity;
 import com.pratham.atm.ui.choose_assessment.science.interfaces.AssessmentAnswerListener;
+import com.pratham.atm.ui.choose_assessment.science.interfaces.AudioPlayerInterface;
 import com.pratham.atm.utilities.Assessment_Constants;
 import com.pratham.atm.utilities.Assessment_Utility;
+import com.pratham.atm.utilities.AudioUtil;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -40,40 +43,47 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/*import butterknife.BindView;
-import butterknife.ButterKnife;*/
-
+import static com.pratham.atm.utilities.Assessment_Utility.getFileExtension;
 import static com.pratham.atm.utilities.Assessment_Utility.showZoomDialog;
 
 @EFragment(R.layout.landscape_layout_mcq_fill_in_the_blanks_with_options_row)
-public class McqFillInTheBlanksFragment extends Fragment {
+public class McqFillInTheBlanksFragment extends Fragment implements AudioPlayerInterface {
 
     @ViewById(R.id.tv_question)
     TextView question;
     @ViewById(R.id.iv_question_image)
     ImageView questionImage;
+    @ViewById(R.id.iv_view_question_img)
+    ImageView iv_view_question_img;
+    @ViewById(R.id.rl_question_img)
+    RelativeLayout rl_question_img;
     @ViewById(R.id.iv_question_gif)
     GifView questionGif;
     @ViewById(R.id.rg_mcq)
     RadioGroup radioGroupMcq;
     @ViewById(R.id.grid_mcq)
     GridLayout gridMcq;
-    AssessmentAnswerListener assessmentAnswerListener;
-    List<ScienceQuestionChoice> options;
-
+    private AssessmentAnswerListener assessmentAnswerListener;
+    private List<ScienceQuestionChoice> options;
+    int clickedOption = 0;
 
     private static final String POS = "pos";
     private static final String SCIENCE_QUESTION = "scienceQuestion";
 
-    private int imgCnt = 0, textCnt = 0;
+    private int imgCnt = 0, textCnt = 0, audioCnt = 0;
     private ScienceQuestion scienceQuestion;
+
+    boolean isQuestionPlaying = false;
+    boolean isOptionPlaying = false;
+    View prevView;
+    View currentView;
 
     public McqFillInTheBlanksFragment() {
         // Required empty public constructor
     }
 
     @AfterViews
-    public void init(){
+    public void init() {
         if (getArguments() != null) {
 //            pos = getArguments().getInt(POS, 0);
             scienceQuestion = (ScienceQuestion) getArguments().getSerializable(SCIENCE_QUESTION);
@@ -93,7 +103,7 @@ public class McqFillInTheBlanksFragment extends Fragment {
         return fragmentFirst;
     }
 
-   /* @Override
+    /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -108,7 +118,7 @@ public class McqFillInTheBlanksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.landscape_layout_mcq_fill_in_the_blanks_with_options_row, container, false);
+        return inflater.inflate(R.layout.layout_mcq_fill_in_the_blanks_with_options_row, container, false);
     }
 
     @Override
@@ -116,43 +126,48 @@ public class McqFillInTheBlanksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         setMcqsQuestion();
-    }
-*/
-    public void setMcqsQuestion() {
+    }*/
+
+    private void setMcqsQuestion() {
         options = new ArrayList<>();
         question.setText(scienceQuestion.getQname());
+        question.setMovementMethod(new ScrollingMovementMethod());
         if (!scienceQuestion.getPhotourl().equalsIgnoreCase("")) {
-            questionImage.setVisibility(View.VISIBLE);
-//            if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork()) {
-
+            String questionExtension = getFileExtension(scienceQuestion.getPhotourl());
             String fileName = Assessment_Utility.getFileName(scienceQuestion.getQid(), scienceQuestion.getPhotourl());
             final String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
 
 
-            String path = scienceQuestion.getPhotourl();
-            String[] imgPath = path.split("\\.");
+            final String path = scienceQuestion.getPhotourl();
+            if (questionExtension.equalsIgnoreCase("gif") || questionExtension.equalsIgnoreCase("png") || questionExtension.equalsIgnoreCase("jpg")) {
+                questionImage.setVisibility(View.VISIBLE);
+                rl_question_img.setVisibility(View.VISIBLE);
+//            if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork()) {
+
+
+           /* String[] imgPath = path.split("\\.");
             int len;
             if (imgPath.length > 0)
                 len = imgPath.length - 1;
-            else len = 0;
-            if (imgPath[len].equalsIgnoreCase("gif")) {
-                try {
-                    InputStream gif;
-                    if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork()) {
-                        Glide.with(getActivity()).asGif()
-                                .load(path)
-                                .apply(new RequestOptions()
-                                        .placeholder(Drawable.createFromPath(localPath)))
-                                .into(questionImage);
-                    } else {
-                        gif = new FileInputStream(localPath);
-                        questionImage.setVisibility(View.GONE);
-                        questionGif.setVisibility(View.VISIBLE);
-                        questionGif.setGifResource(gif);
+            else len = 0;*/
+                if (questionExtension.equalsIgnoreCase("gif")) {
+                    try {
+                        InputStream gif;
+                        if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork()) {
+                            Glide.with(getActivity()).asGif()
+                                    .load(path)
+                                    .apply(new RequestOptions()
+                                            .placeholder(Drawable.createFromPath(localPath)))
+                                    .into(questionImage);
+                        } else {
+                            gif = new FileInputStream(localPath);
+                            questionImage.setVisibility(View.GONE);
+                            questionGif.setVisibility(View.VISIBLE);
+                            questionGif.setGifResource(gif);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
            /*     Glide.with(getActivity()).asGif()
                         .load(path)
@@ -160,26 +175,34 @@ public class McqFillInTheBlanksFragment extends Fragment {
                                 .placeholder(Drawable.createFromPath(localPath)))
                         .into(questionImage);*/
 //                    zoomImg.setVisibility(View.VISIBLE);
-            } else {
-                Glide.with(getActivity())
-                        .load(path)
-                        .apply(new RequestOptions()
-                                .placeholder(Drawable.createFromPath(localPath)))
-                        .into(questionImage);
-            }
+                } else {
+                    Glide.with(getActivity())
+                            .load(path)
+                            .apply(new RequestOptions()
+                                    .placeholder(Drawable.createFromPath(localPath)))
+                            .into(questionImage);
+                }
+                iv_view_question_img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showZoomDialog(getActivity(), scienceQuestion.getPhotourl(), localPath);
+                  /*  MaryPopup marypopup = MaryPopup.with(getActivity())
+                            .cancellable(true)
+                            .blackOverlayColor(Color.parseColor("#DD444444"))
+                            .backgroundColor(Color.parseColor("#EFF4F5"))
+                            .center(true)
+                            .content(R.layout.popup_layout)
+                            .from(questionImage);
+                    marypopup.show();*/
 
-            questionImage.setOnClickListener(new View.OnClickListener() {
+                    }
+                });
+          /*  questionGif.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showZoomDialog(getActivity(), scienceQuestion.getPhotourl(), localPath);
                 }
-            });
-            questionGif.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showZoomDialog(getActivity(), scienceQuestion.getPhotourl(), localPath);
-                }
-            });
+            });*/
            /* } else {
                 String fileName = Assessment_Utility.getFileName(scienceQuestion.getQid(), scienceQuestion.getPhotourl());
                 final String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
@@ -191,7 +214,34 @@ public class McqFillInTheBlanksFragment extends Fragment {
                     }
                 });
             }*/
-        } else questionImage.setVisibility(View.GONE);
+            } else {
+                questionImage.setVisibility(View.VISIBLE);
+                iv_view_question_img.setVisibility(View.GONE);
+                questionImage.setImageResource(R.drawable.ic_play_circle);
+                questionImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (isQuestionPlaying) {
+                            isQuestionPlaying = false;
+                            questionImage.setImageResource(R.drawable.ic_play_circle);
+                            AudioUtil.stopPlayingAudio();
+                            stopPlayer();
+
+                        } else {
+                            isQuestionPlaying = true;
+                            questionImage.setImageResource(R.drawable.ic_pause);
+                            if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork())
+                                AudioUtil.playRecording(path, McqFillInTheBlanksFragment.this);
+                            else
+                                AudioUtil.playRecording(localPath, McqFillInTheBlanksFragment.this);
+                        }
+                    }
+                });
+            }
+        } else {
+            questionImage.setVisibility(View.GONE);
+            rl_question_img.setVisibility(View.GONE);
+        }
 
         options.clear();
         options = AppDatabase.getDatabaseInstance(getActivity()).getScienceQuestionChoicesDao().getQuestionChoicesByQID(scienceQuestion.getQid());
@@ -203,7 +253,14 @@ public class McqFillInTheBlanksFragment extends Fragment {
 
             for (int r = 0; r < options.size(); r++) {
                 if (!options.get(r).getChoiceurl().equalsIgnoreCase("")) {
-                    imgCnt++;
+                    String ansExtension = getFileExtension(options.get(r).getChoiceurl());
+                    if (ansExtension.equalsIgnoreCase("gif") ||
+                            ansExtension.equalsIgnoreCase("png") ||
+                            ansExtension.equalsIgnoreCase("jpg")) {
+                        imgCnt++;
+                    } else {
+                        audioCnt++;
+                    }
                 }
                 if (!options.get(r).getChoicename().equalsIgnoreCase("")) {
                     textCnt++;
@@ -218,17 +275,62 @@ public class McqFillInTheBlanksFragment extends Fragment {
                 String ansId = scienceQuestion.getUserAnswerId();
 
                 if (textCnt == options.size()) {
+                    radioGroupMcq.setVisibility(View.GONE);
+                    gridMcq.setVisibility(View.VISIBLE);
                     if (options.get(r).getChoiceurl().equalsIgnoreCase("")) {
-                        radioGroupMcq.setVisibility(View.VISIBLE);
-                        gridMcq.setVisibility(View.GONE);
 
-                        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_radio_item, radioGroupMcq, false);
-                        final RadioButton radioButton = (RadioButton) view;
-                        radioButton.setButtonTintList(Assessment_Utility.colorStateList);
-                        radioButton.setId(r);
-                        radioButton.setElevation(3);
+                        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_single_text_item, gridMcq, false);
+                        final TextView textView = (TextView) view;
+//                        textView.setElevation(3);
+                        textView.setMovementMethod(new ScrollingMovementMethod());
+                        try {
+                            String currentLang = FastSave.getInstance().getString("language", "1");
+                            if (currentLang.equalsIgnoreCase("12")) {
+                                Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/lohit_oriya.ttf");
+                                textView.setTypeface(font);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        textView.setText(options.get(r).getChoicename());
+                        gridMcq.addView(textView);
+                        if (scienceQuestion.getUserAnswerId().equalsIgnoreCase(options.get(r).getQcid())) {
+//                            textView.setTextColor(Assessment_Utility.selectedColor);
+//                            textView.setBackground(getActivity().getResources().getDrawable(R.drawable.gradient_selector));
+                            textView.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                            GradientDrawable bgShape = (GradientDrawable) textView.getBackground();
+                            bgShape.setStroke(10, Assessment_Utility.selectedColor);
+                        } else {
+//                            textView.setTextColor(Color.WHITE);
+                            textView.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
 
-                       /* if (!options.get(r).getChoiceurl().equalsIgnoreCase("")) {
+                        }
+                        final int finalR2 = r;
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                setOnclickOnItem(v, options.get(finalR2));
+
+//                                textView.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
+                                textView.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+//                                textView.setTextColor(Assessment_Utility.selectedColor);
+                                GradientDrawable bgShape = (GradientDrawable) textView.getBackground();
+                                textView.setClickable(true);
+                                bgShape.setStroke(10, Assessment_Utility.selectedColor);
+                            }
+                        });
+
+                    }
+/*                        radioGroupMcq.setVisibility(View.GONE);
+                        gridMcq.setVisibility(View.VISIBLE);
+                        gridMcq.setColumnCount(2);
+                        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_single_text_item, radioGroupMcq, false);
+                        final TextView textView = (TextView) view;
+                        textView.setTextColor(Assessment_Utility.colorStateList);
+                        textView.setId(r);
+                        textView.setElevation(3);
+
+                       *//* if (!options.get(r).getChoiceurl().equalsIgnoreCase("")) {
                             final String path = options.get(r).getChoiceurl();
                             radioButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -246,23 +348,25 @@ public class McqFillInTheBlanksFragment extends Fragment {
                                 radioButton.setChecked(false);
                                 radioButton.setTextColor(Color.WHITE);
                             }
-                        } else {*/
-                        radioButton.setText(options.get(r).getChoicename());
+                        } else {*//*
+                        textView.setText(options.get(r).getChoicename());
                         if (scienceQuestion.getUserAnswerId().equalsIgnoreCase(options.get(r).getQcid())) {
-                            radioButton.setChecked(true);
-                            radioButton.setTextColor(Assessment_Utility.selectedColor);
+//                            textView.setChecked(true);
+                            textView.setTextColor(Assessment_Utility.selectedColor);
                         } else {
-                            radioButton.setChecked(false);
-                            radioButton.setTextColor(Color.WHITE);
+//                            textView.setChecked(false);
+                            textView.setTextColor(Color.WHITE);
                         }
-                        radioGroupMcq.addView(radioButton);
+//                        radioGroupMcq.addView(textView);
+                        gridMcq.addView(textView);
+
                         if (ans.equals(options.get(r).getChoicename())) {
-                            radioButton.setChecked(true);
+//                            textView.setChecked(true);
                         } else {
-                            radioButton.setChecked(false);
+//                            textView.setChecked(false);
                         }
 //                        }
-                    }
+                    }*/
                 } else if (imgCnt == options.size()) {
                     radioGroupMcq.setVisibility(View.GONE);
                     gridMcq.setVisibility(View.VISIBLE);
@@ -315,15 +419,23 @@ public class McqFillInTheBlanksFragment extends Fragment {
                     }
                     final int finalR = r;
 //                    final ImageView finalImageView = imageView;
+                    rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             for (int g = 0; g < gridMcq.getChildCount(); g++) {
-                                gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
-                                ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+//                                gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+                                gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
+//                                ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
                             }
-                            rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
-                            tick.setVisibility(View.VISIBLE);
+
+
+                            rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                            rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                            GradientDrawable bgShape = (GradientDrawable) rl_mcq.getBackground();
+                            bgShape.setStroke(10, Assessment_Utility.selectedColor);
+
+//                            tick.setVisibility(View.VISIBLE);
                      /*       String fileName = Assessment_Utility.getFileName(scienceQuestion.getQid(), options.get(finalR).getChoiceurl());
                             String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
 */
@@ -352,18 +464,23 @@ public class McqFillInTheBlanksFragment extends Fragment {
 
 
                     if (scienceQuestion.getUserAnswerId().equalsIgnoreCase(options.get(r).getQcid())) {
-                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
-                        tick.setVisibility(View.VISIBLE);
+                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                        GradientDrawable bgShape = (GradientDrawable) rl_mcq.getBackground();
+                        bgShape.setStroke(10, Assessment_Utility.selectedColor);
+
+//                        tick.setVisibility(View.VISIBLE);
 
                     } else {
-                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
-                        tick.setVisibility(View.GONE);
+//                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
+//                        tick.setVisibility(View.GONE);
 
                     }
                     setImage(view, imageUrl, localPath);
                     gridMcq.addView(viewRoot);
 
-                } else {
+                } else if (imgCnt != 0 && imgCnt < options.size()) {
                     gridMcq.setColumnCount(2);
                     final int finalR1 = r;
                     if (!options.get(r).getChoiceurl().equalsIgnoreCase("")) {
@@ -449,6 +566,10 @@ public class McqFillInTheBlanksFragment extends Fragment {
                                /* } else {
                                     showZoomDialog(localPath);
                                 }*/
+                                view.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                                GradientDrawable bgShape = (GradientDrawable) view.getBackground();
+                                bgShape.setStroke(10, Assessment_Utility.selectedColor);
+
                             }
                         });
 
@@ -465,13 +586,14 @@ public class McqFillInTheBlanksFragment extends Fragment {
                         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_single_text_item, gridMcq, false);
                         final TextView textView = (TextView) view;
                         textView.setElevation(3);
+                        textView.setMovementMethod(new ScrollingMovementMethod());
                         textView.setText(options.get(r).getChoicename());
                         gridMcq.addView(textView);
                         if (scienceQuestion.getUserAnswerId().equalsIgnoreCase(options.get(r).getQcid())) {
                             textView.setTextColor(Assessment_Utility.selectedColor);
                             textView.setBackground(getActivity().getResources().getDrawable(R.drawable.gradient_selector));
                         } else {
-                            textView.setTextColor(Color.WHITE);
+//                            textView.setTextColor(Color.WHITE);
                             textView.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
 
                         }
@@ -482,10 +604,106 @@ public class McqFillInTheBlanksFragment extends Fragment {
 
                                 textView.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
                                 textView.setTextColor(Assessment_Utility.selectedColor);
+
+                                textView.setBackground(getActivity().getResources().getDrawable(R.drawable.ripple_rectangle_transparent));
+                                GradientDrawable bgShape = (GradientDrawable) textView.getBackground();
+                                bgShape.setStroke(10, Assessment_Utility.selectedColor);
+
                             }
                         });
                     }
 
+
+                } else if (audioCnt == options.size()) {
+                    radioGroupMcq.setVisibility(View.GONE);
+                    gridMcq.setVisibility(View.VISIBLE);
+                    String fileName = Assessment_Utility.getFileName(scienceQuestion.getQid(), options.get(r).getChoiceurl());
+//                String localPath = Environment.getExternalStorageDirectory() + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
+                    final String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
+
+//                    String path = options.get(r).getChoiceurl();
+                    String pathExtension = getFileExtension(options.get(r).getChoiceurl());
+                  /*  String[] imgPath = path.split("\\.");
+                    int len;
+                    if (imgPath.length > 0)
+                        len = imgPath.length - 1;
+                    else len = 0;*/
+                  /*  final GifView gifView;
+                    ImageView imageView = null;*/
+
+                    final String imageUrl = options.get(r).getChoiceurl();
+
+                    final ImageView audioImage;
+                    final RelativeLayout rl_mcq;
+                    View viewRoot;
+                    final ImageView tick;
+                    final TextView audioText;
+
+
+//                    if (pathExtension.equalsIgnoreCase("gif")) {
+                       /* viewRoot = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_gif_item, gridMcq, false);
+                        view = viewRoot.findViewById(R.id.mcq_gif);
+                        rl_mcq = viewRoot.findViewById(R.id.rl_mcq);
+                        tick = viewRoot.findViewById(R.id.iv_tick);
+                        zoomImg = viewRoot.findViewById(R.id.iv_view_img);*/
+                        /*  setImage(view, imageUrl, localPath);
+                        gridMcq.addView(view);*/
+//                    } else {
+                    viewRoot = LayoutInflater.from(getActivity()).inflate(R.layout.layout_mcq_audio_item, gridMcq, false);
+                    audioImage = viewRoot.findViewById(R.id.mcq_audio);
+                    rl_mcq = viewRoot.findViewById(R.id.rl_mcq);
+                    tick = viewRoot.findViewById(R.id.iv_tick);
+                    audioText = viewRoot.findViewById(R.id.txt_audio_title);
+
+
+//                    }
+                    final int finalR = r;
+                    audioText.setText("Audio " + (r + 1));
+
+                    rl_mcq.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            for (int g = 0; g < gridMcq.getChildCount(); g++) {
+//                                gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+                                ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+//                                ((ImageView) ((LinearLayout) ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(0)).getChildAt(1)).setImageResource(R.drawable.ic_play);
+                            }
+                            tick.setVisibility(View.VISIBLE);
+                            List<ScienceQuestionChoice> ans = new ArrayList<>();
+                            ans.add(options.get(finalR));
+                            scienceQuestion.setMatchingNameList(ans);
+                            assessmentAnswerListener.setAnswerInActivity("", "", scienceQuestion.getQid(), ans);
+
+                        }
+                    });
+//                    final ImageView finalImageView = imageView;
+                    audioImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            for (int g = 0; g < gridMcq.getChildCount(); g++) {
+//                                gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+//                                ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+                                ((ImageView) ((LinearLayout) ((CardView) ((RelativeLayout) gridMcq.getChildAt(g)).getChildAt(0)).getChildAt(0)).getChildAt(1)).setImageResource(R.drawable.ic_play);
+
+                            }
+                            currentView = v;
+                            setAudioToOption(v, imageUrl, localPath);
+//                            rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
+
+                        }
+                    });
+//                    zoomImg.setVisibility(View.GONE);
+                    if (scienceQuestion.getUserAnswerId().equalsIgnoreCase(options.get(r).getQcid())) {
+//                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
+                        tick.setVisibility(View.VISIBLE);
+
+                    } else {
+//                        rl_mcq.setBackground(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+                        tick.setVisibility(View.GONE);
+
+                    }
+//                    setImage(view, imageUrl, localPath);
+                    gridMcq.addView(viewRoot);
 
                 }
 
@@ -517,13 +735,39 @@ public class McqFillInTheBlanksFragment extends Fragment {
         });
     }
 
+    private void setAudioToOption(View v, String onlinePath, String localPath) {
+        if (prevView != null && v != prevView) {
+            isOptionPlaying = false;
+            AudioUtil.stopPlayingAudio();
+            stopPlayer();
+        }
+        prevView = v;
+        if (isOptionPlaying) {
+            isOptionPlaying = false;
+            ((ImageView) v).setImageResource(R.drawable.ic_play);
+            AudioUtil.stopPlayingAudio();
+            stopPlayer();
+
+        } else {
+            isOptionPlaying = true;
+            ((ImageView) v).setImageResource(R.drawable.ic_pause);
+            if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork())
+                AudioUtil.playRecording(onlinePath, this);
+            else AudioUtil.playRecording(localPath, this);
+        }
+    }
+
 
     private void setOnclickOnItem(View v, ScienceQuestionChoice scienceQuestionChoice) {
         for (int g = 0; g < gridMcq.getChildCount(); g++) {
-            gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+//            gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_radio_button));
+            gridMcq.getChildAt(g).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text));
             View view = gridMcq.getChildAt(g);
-            if (view instanceof TextView)
-                ((TextView) view).setTextColor(Color.WHITE);
+//            if (view instanceof TextView)
+//                ((TextView) view).setTextColor(Color.WHITE);
+            if (view instanceof RelativeLayout) {
+                ((CardView) ((RelativeLayout) view).getChildAt(0)).getChildAt(1).setVisibility(View.GONE);
+            }
         }
 
         List<ScienceQuestionChoice> ans = new ArrayList<>();
@@ -570,5 +814,27 @@ public class McqFillInTheBlanksFragment extends Fragment {
 //        }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        if(audioPlayerInterface!=null)
+        if (isOptionPlaying || isQuestionPlaying)
+            AudioUtil.stopPlayingAudio();
+        stopPlayer();
+    }
+
+    @Override
+    public void stopPlayer() {
+        if (isQuestionPlaying) {
+            questionImage.setImageResource(R.drawable.ic_play_circle);
+            isQuestionPlaying = false;
+        }
+        if (isOptionPlaying) {
+            ((ImageView) currentView).setImageResource(R.drawable.ic_play);
+            isOptionPlaying = false;
+
+        }
+    }
 }
 

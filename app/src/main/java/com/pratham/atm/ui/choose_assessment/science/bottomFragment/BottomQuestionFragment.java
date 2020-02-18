@@ -19,13 +19,15 @@ import com.pratham.atm.R;
 import com.pratham.atm.domain.ScienceQuestion;
 import com.pratham.atm.ui.choose_assessment.science.adapters.QuestionTrackerAdapter;
 import com.pratham.atm.ui.choose_assessment.science.interfaces.QuestionTrackerListener;
-
+import com.pratham.atm.utilities.Assessment_Utility;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
 
 
 public class BottomQuestionFragment extends BottomSheetDialogFragment {
@@ -72,7 +74,7 @@ public class BottomQuestionFragment extends BottomSheetDialogFragment {
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 5);
         rvQuestion.setLayoutManager(linearLayoutManager);
         rvQuestion.setAdapter(questionTrackerAdapter);
-
+        Assessment_Utility.setInstruction(getActivity(), "click_save_instruction");
     }
 
 //    private void setStudentsToRecycler() {
@@ -83,6 +85,7 @@ public class BottomQuestionFragment extends BottomSheetDialogFragment {
     public void onPause() {
         super.onPause();
 //        SplashActivity.fragmentBottomPauseFlg = true;
+        mediaPlayer.pause();
     }
 
     @Override
@@ -128,6 +131,8 @@ public class BottomQuestionFragment extends BottomSheetDialogFragment {
     public void onStop() {
         super.onStop();
 //        EventBus.getDefault().unregister(this);
+        mediaPlayer.stop();
+
     }
 
 }

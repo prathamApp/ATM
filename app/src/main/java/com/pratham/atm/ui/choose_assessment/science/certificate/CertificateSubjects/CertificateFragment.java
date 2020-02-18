@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import com.pratham.atm.R;
 import com.pratham.atm.database.AppDatabase;
 import com.pratham.atm.domain.AssessmentPaperForPush;
 import com.pratham.atm.domain.AssessmentPaperPattern;
+import com.pratham.atm.domain.CertificateRatingModalClass;
 import com.pratham.atm.utilities.APIs;
 import com.pratham.atm.utilities.Assessment_Utility;
 
@@ -30,7 +33,9 @@ import org.androidannotations.annotations.ViewById;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @EFragment(R.layout.fragment_certificate)
@@ -43,6 +48,10 @@ public class CertificateFragment extends Fragment implements CertificateContract
     TextView q2_label;
     @ViewById(R.id.q3_label)
     TextView q3_label;
+    /*@ViewById(R.id.q4_label)
+    TextView q4_label;
+    @ViewById(R.id.q5_label)
+    TextView q5_label;*/
 
     @ViewById(R.id.iv_student)
     ImageView iv_student;
@@ -72,9 +81,17 @@ public class CertificateFragment extends Fragment implements CertificateContract
     RatingBar q2_ratingStars;
     @ViewById(R.id.q3_ratingStars)
     RatingBar q3_ratingStars;
+    /*@ViewById(R.id.q4_ratingStars)
+    RatingBar q4_ratingStars;
+    @ViewById(R.id.q5_ratingStars)
+    RatingBar q5_ratingStars;*/
     @Bean(CertificatePresenterImpl.class)
     CertificateContract.CertificatePresenter presenter;
     AssessmentPaperForPush assessmentPaperForPush;
+
+    @ViewById(R.id.rv_rating)
+    RecyclerView rv_rating;
+
 
     public CertificateFragment() {
     }
@@ -122,7 +139,7 @@ public class CertificateFragment extends Fragment implements CertificateContract
     private void generateCertificate() {
 //        try {
         presenter.getStudentName();
-        setQuestionStars();
+//        setQuestionStars();
 //        String examId = assessmentPaperForPush.getExamId();
 //        JSONArray questionList = fetchQuestionsFromAssets("certificate_questions.json", "QuestionList");
 //            JSONArray topics = fetchQuestionsFromAssets("certificate_topics.json", "topicList");
@@ -143,16 +160,22 @@ public class CertificateFragment extends Fragment implements CertificateContract
                 .getAssessmentPaperPatternDao().getAllAssessmentPaperPatternsBySubIdAndExamId(assessmentPaperForPush.getSubjectId(), assessmentPaperForPush.getExamId());
         if (assessmentPaperPattern != null) {
             Log.d(";;;;", assessmentPaperPattern.getCertificateQuestion1() + "");
-            q1_label.setText(assessmentPaperPattern.getCertificateQuestion1() + "");
+            createQuestionList(assessmentPaperPattern);
+
+         /*   q1_label.setText(assessmentPaperPattern.getCertificateQuestion1() + "");
             q2_label.setText(assessmentPaperPattern.getCertificateQuestion2() + "");
-            q3_label.setText(assessmentPaperPattern.getCertificateQuestion3() + "");
+            q3_label.setText(assessmentPaperPattern.getCertificateQuestion3() + "");*/
+           /* q4_label.setText(assessmentPaperPattern.getCertificateQuestion4() + "");
+            q5_label.setText(assessmentPaperPattern.getCertificateQuestion5() + "");*/
         } else {
             if (AssessmentApplication.wiseF.isDeviceConnectedToMobileOrWifiNetwork())
                 downloadPaperPattern(assessmentPaperForPush.getExamId());
             else {
-                q1_label.setText("");
+             /*   q1_label.setText("");
                 q2_label.setText("");
-                q3_label.setText("");
+                q3_label.setText("");*/
+            /*    q4_label.setText("");
+                q5_label.setText("");*/
             }
         }
 
@@ -187,6 +210,34 @@ public class CertificateFragment extends Fragment implements CertificateContract
 //        presenter.getPaper(assessmentPaperForPush.getExamId(), assessmentPaperForPush.getSubjectId());
     }
 
+    private void createQuestionList(AssessmentPaperPattern assessmentPaperPattern) {
+        String paperId = assessmentPaperForPush.getPaperId();
+        List<CertificateRatingModalClass> questionList = new ArrayList<>();
+        setValuesInList(questionList,assessmentPaperPattern.getCertificateQuestion1(),assessmentPaperForPush.getQuestion1Rating(),"1",paperId);
+        setValuesInList(questionList,assessmentPaperPattern.getCertificateQuestion2(),assessmentPaperForPush.getQuestion2Rating(),"2",paperId);
+        setValuesInList(questionList,assessmentPaperPattern.getCertificateQuestion3(),assessmentPaperForPush.getQuestion3Rating(),"3",paperId);
+        setValuesInList(questionList,assessmentPaperPattern.getCertificateQuestion4(),assessmentPaperForPush.getQuestion4Rating(),"4",paperId);
+        setValuesInList(questionList,assessmentPaperPattern.getCertificateQuestion5(),assessmentPaperForPush.getQuestion5Rating(),"5",paperId);
+        CertificateRatingAdapter adapter = new CertificateRatingAdapter(getActivity(), questionList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_rating.setLayoutManager(mLayoutManager);
+        rv_rating.setAdapter(adapter);
+    }
+    private void setValuesInList(List<CertificateRatingModalClass> questionList, String question, String questionRating, String level, String paperId) {
+        float rating;
+        CertificateRatingModalClass ratingModalClass = new CertificateRatingModalClass();
+        if (question != null) {
+            ratingModalClass.setCertificateQuestion(question + "");
+            if (questionRating != null
+                    && !questionRating.trim().equalsIgnoreCase("") && !questionRating.trim().equalsIgnoreCase("null")) {
+                rating = Float.parseFloat(questionRating);
+            } else {
+                rating = presenter.getRating(level, paperId);
+            }
+            ratingModalClass.setRating(rating);
+            questionList.add(ratingModalClass);
+        }
+    }
     private void downloadPaperPattern(String examId) {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
@@ -204,9 +255,10 @@ public class CertificateFragment extends Fragment implements CertificateContract
                         if (assessmentPaperPattern != null) {
                             AppDatabase.getDatabaseInstance(getActivity()).getAssessmentPaperPatternDao().insertPaperPattern(assessmentPaperPattern);
                             Log.d(";;;;", assessmentPaperPattern.getCertificateQuestion1() + "");
-                            q1_label.setText(assessmentPaperPattern.getCertificateQuestion1() + "");
+                            createQuestionList(assessmentPaperPattern);
+                           /* q1_label.setText(assessmentPaperPattern.getCertificateQuestion1() + "");
                             q2_label.setText(assessmentPaperPattern.getCertificateQuestion2() + "");
-                            q3_label.setText(assessmentPaperPattern.getCertificateQuestion3() + "");
+                            q3_label.setText(assessmentPaperPattern.getCertificateQuestion3() + "");*/
                         }
                         progressDialog.dismiss();
                     }
@@ -220,8 +272,8 @@ public class CertificateFragment extends Fragment implements CertificateContract
     }
 
 
-    private void setQuestionStars() {
-        float q1Rating, q2Rating, q3Rating;
+   /* private void setQuestionStars() {
+        float q1Rating, q2Rating, q3Rating, q4Rating, q5Rating;
         String paperId = assessmentPaperForPush.getPaperId();
         if (assessmentPaperForPush.getQuestion1Rating() != null
                 && !assessmentPaperForPush.getQuestion1Rating().trim().equalsIgnoreCase("") && !assessmentPaperForPush.getQuestion1Rating().trim().equalsIgnoreCase("null")) {
@@ -247,10 +299,24 @@ public class CertificateFragment extends Fragment implements CertificateContract
         }
         q3_ratingStars.setRating(q3Rating);
 
-        AppDatabase.getDatabaseInstance(getActivity()).getAssessmentPaperForPushDao().setAllRatings("" + q1Rating, "" + q2Rating, "" + q3Rating, paperId);
 
+        if (assessmentPaperForPush.getQuestion4Rating() != null
+                && !assessmentPaperForPush.getQuestion4Rating().trim().equalsIgnoreCase("") && !assessmentPaperForPush.getQuestion4Rating().trim().equalsIgnoreCase("null")) {
+            q4Rating = Float.parseFloat(assessmentPaperForPush.getQuestion4Rating());
+        } else {
+            q4Rating = presenter.getRating("4", paperId);
+        }
+        q4_ratingStars.setRating(q4Rating);
+        if (assessmentPaperForPush.getQuestion5Rating() != null
+                && !assessmentPaperForPush.getQuestion5Rating().trim().equalsIgnoreCase("") && !assessmentPaperForPush.getQuestion5Rating().trim().equalsIgnoreCase("null")) {
+            q5Rating = Float.parseFloat(assessmentPaperForPush.getQuestion5Rating());
+        } else {
+            q5Rating = presenter.getRating("5", paperId);
+        }
+        q5_ratingStars.setRating(q5Rating);
+        AppDatabase.getDatabaseInstance(getActivity()).getAssessmentPaperForPushDao().setAllRatings("" + q1Rating, "" + q2Rating, "" + q3Rating, "" + q4Rating, "" + q5Rating, paperId);
     }
-
+*/
 
    /* public JSONArray fetchQuestionsFromAssets(String fileName, String nodeTitle) {
         JSONArray returnCodeList = null;

@@ -146,7 +146,7 @@ public class ScienceAdapter extends RecyclerView.Adapter implements QuestionType
                 return new FillInTheBlanksWithoutOptionsViewHolder(v, context, this);
 */
                 LayoutInflater mcq = LayoutInflater.from(viewGroup.getContext());
-                v = mcq.inflate(R.layout.layout_mcq_fill_in_the_blanks_with_options_row, viewGroup, false);
+                v = mcq.inflate(R.layout.landscape_layout_mcq_fill_in_the_blanks_with_options_row, viewGroup, false);
                 return new McqFillInTheBlanksViewHolder(v, context, this);
             case MULTIPLE_SELECT:
                 LayoutInflater multipleSelect = LayoutInflater.from(viewGroup.getContext());
@@ -170,7 +170,7 @@ public class ScienceAdapter extends RecyclerView.Adapter implements QuestionType
 
             case FILL_IN_THE_BLANK_WITH_OPTION:
                 LayoutInflater fillInWithOption = LayoutInflater.from(viewGroup.getContext());
-                v = fillInWithOption.inflate(R.layout.layout_mcq_fill_in_the_blanks_with_options_row, viewGroup, false);
+                v = fillInWithOption.inflate(R.layout.landscape_layout_mcq_fill_in_the_blanks_with_options_row, viewGroup, false);
                 return new McqFillInTheBlanksViewHolder(v, context, this);
 
             case ARRANGE_SEQUENCE:

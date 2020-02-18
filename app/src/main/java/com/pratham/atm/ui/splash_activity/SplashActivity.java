@@ -585,6 +585,8 @@ public class SplashActivity extends SplashSupportActivity implements SplashContr
                                 paper.setQuestion1Rating(response.getJSONObject(i).getString("question1Rating"));
                                 paper.setQuestion2Rating(response.getJSONObject(i).getString("question2Rating"));
                                 paper.setQuestion3Rating(response.getJSONObject(i).getString("question3Rating"));
+                                paper.setQuestion4Rating(response.getJSONObject(i).getString("question4Rating"));
+                                paper.setQuestion5Rating(response.getJSONObject(i).getString("question5Rating"));
                                 paper.setFullName(response.getJSONObject(i).getString("FullName"));
                                 paper.setGender(response.getJSONObject(i).getString("Gender"));
                                 paper.setAge(response.getJSONObject(i).getInt("Age"));

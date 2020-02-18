@@ -30,6 +30,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
+
 /*import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;*/
@@ -78,6 +80,8 @@ public class FragmentSelectGroup extends Fragment implements ContractGroup {
             get8to14Groups(present_groups);
         }
         setGroups(groups);
+        Assessment_Utility.setInstruction(getActivity(),"select_group_instruction");
+
     }
 
 
@@ -184,6 +188,8 @@ public class FragmentSelectGroup extends Fragment implements ContractGroup {
         } else {
             groupAdapter.updateGroupItems(groups);
         }
+
+
     }
 
     private int dpToPx(int dp) {
@@ -269,5 +275,19 @@ public class FragmentSelectGroup extends Fragment implements ContractGroup {
                 }
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+
     }
 }

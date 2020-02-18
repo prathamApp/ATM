@@ -39,6 +39,7 @@
             app:durationAnimation="250"
             app:isClickToSwipeEnable="true"
             app:textChecked="@string/checked_text"
+            android:elevation="@dimen/_20sdp"
             app:textColorChecked="@color/black"
             app:textColorUnChecked="@color/black"
             app:textUnchecked="@string/unchecked_text"
@@ -110,7 +111,6 @@
             android:id="@+id/rl_choose_sub"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/menu_icon"
             android:visibility="visible">
             <!--android:layout_marginTop="@dimen/minus_margin"-->
             <android.support.v7.widget.RecyclerView

@@ -2,16 +2,12 @@ package com.pratham.atm.ui.choose_assessment.science.viewpager_fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +20,7 @@ import com.pratham.atm.database.AppDatabase;
 import com.pratham.atm.domain.ScienceQuestion;
 import com.pratham.atm.domain.ScienceQuestionChoice;
 import com.pratham.atm.ui.choose_assessment.science.ItemMoveCallback;
-import com.pratham.atm.ui.choose_assessment.science.adapters.DragDropAdapter;
+import com.pratham.atm.ui.choose_assessment.science.adapters.ArrangeSeqDragDropAdapter;
 import com.pratham.atm.ui.choose_assessment.science.interfaces.StartDragListener;
 import com.pratham.atm.utilities.Assessment_Constants;
 import com.pratham.atm.utilities.Assessment_Utility;
@@ -38,9 +34,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-/*import butterknife.BindView;
-import butterknife.ButterKnife;*/
 
 import static com.pratham.atm.utilities.Assessment_Utility.showZoomDialog;
 
@@ -67,16 +60,6 @@ public class ArrangeSequenceFragment extends Fragment implements StartDragListen
         // Required empty public constructor
     }
 
-    @AfterViews
-    public void init(){
-        if (getArguments() != null) {
-            pos = getArguments().getInt(POS, 0);
-            scienceQuestion = (ScienceQuestion) getArguments().getSerializable(SCIENCE_QUESTION);
-        }
-        setArrangeSeqQuestion();
-
-    }
-
     public static ArrangeSequenceFragment newInstance(int pos, ScienceQuestion scienceQuestion) {
         ArrangeSequenceFragment_ arrangeSequenceFragment = new ArrangeSequenceFragment_();
         Bundle args = new Bundle();
@@ -86,32 +69,44 @@ public class ArrangeSequenceFragment extends Fragment implements StartDragListen
         return arrangeSequenceFragment;
     }
 
- /*   @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
+    @AfterViews
+    public void init() {
         if (getArguments() != null) {
             pos = getArguments().getInt(POS, 0);
             scienceQuestion = (ScienceQuestion) getArguments().getSerializable(SCIENCE_QUESTION);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.layout_arrange_seq_row, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         setArrangeSeqQuestion();
 
-    }*/
+    }
 
+    /*  @Override
+      public void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          if (getArguments() != null) {
+              pos = getArguments().getInt(POS, 0);
+              scienceQuestion = (ScienceQuestion) getArguments().getSerializable(SCIENCE_QUESTION);
+          }
+      }
+
+      @Override
+      public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                               Bundle savedInstanceState) {
+          // Inflate the layout for this fragment
+          return inflater.inflate(R.layout.layout_arrange_seq_row, container, false);
+      }
+
+      @Override
+      public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+          super.onViewCreated(view, savedInstanceState);
+          ButterKnife.bind(this, view);
+          setArrangeSeqQuestion();
+
+      }
+  */
     public void setArrangeSeqQuestion() {
         question.setText(scienceQuestion.getQname());
+
         final String fileName = Assessment_Utility.getFileName(scienceQuestion.getQid(), scienceQuestion.getPhotourl());
         final String localPath = AssessmentApplication.assessPath + Assessment_Constants.STORE_DOWNLOADED_MEDIA_PATH + "/" + fileName;
         if (!scienceQuestion.getPhotourl().equalsIgnoreCase("")) {
@@ -162,13 +157,13 @@ public class ArrangeSequenceFragment extends Fragment implements StartDragListen
         questionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showZoomDialog(getActivity(),scienceQuestion.getPhotourl(), localPath);
+                showZoomDialog(getActivity(), scienceQuestion.getPhotourl(), localPath);
             }
         });
         questionGif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showZoomDialog(getActivity(),scienceQuestion.getPhotourl(), localPath);
+                showZoomDialog(getActivity(), scienceQuestion.getPhotourl(), localPath);
             }
         });
 
@@ -183,6 +178,7 @@ public class ArrangeSequenceFragment extends Fragment implements StartDragListen
             }
 
         }
+
 
 //        List list1 = new ArrayList();
         List<ScienceQuestionChoice> shuffledList = new ArrayList<>();
@@ -209,7 +205,8 @@ public class ArrangeSequenceFragment extends Fragment implements StartDragListen
 
             }
 
-            DragDropAdapter dragDropAdapter = new DragDropAdapter(this, shuffledList, getActivity());
+
+            ArrangeSeqDragDropAdapter dragDropAdapter = new ArrangeSeqDragDropAdapter(this, shuffledList, getActivity());
             ItemTouchHelper.Callback callback =
                     new ItemMoveCallback(dragDropAdapter);
             touchHelper = new ItemTouchHelper(callback);

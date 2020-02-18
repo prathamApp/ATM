@@ -29,14 +29,16 @@ import com.pratham.atm.utilities.Assessment_Constants;
 import com.pratham.atm.utilities.Assessment_Utility;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.Touch;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-import butterknife.OnClick;
-import butterknife.OnTouch;
+import static com.pratham.atm.utilities.Assessment_Utility.mediaPlayer;
+
 
 @EFragment(R.layout.fragment_child_attendance)
 public class FragmentChildAttendance extends Fragment implements ContractChildAttendance.attendanceView {
@@ -120,15 +122,17 @@ public class FragmentChildAttendance extends Fragment implements ContractChildAt
         if (childAdapter == null) {
             childAdapter = new ChildAdapter(getActivity(), childs, avatars, FragmentChildAttendance.this);
             rv_child.setHasFixedSize(true);
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
             rv_child.setLayoutManager(mLayoutManager);
-            rv_child.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(15), true));
+            rv_child.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(15), true));
             rv_child.setItemAnimator(new DefaultItemAnimator());
             // rv_child.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             rv_child.setAdapter(childAdapter);
         } else {
             childAdapter.notifyDataSetChanged();
         }
+        Assessment_Utility.setInstruction(getActivity(),"select_character_instruction");
+
     }
 
     @Override
@@ -173,7 +177,7 @@ public class FragmentChildAttendance extends Fragment implements ContractChildAt
         presentActivity(v);
     }
 
-    @OnTouch(R.id.btn_attendance_next)
+    @Touch(R.id.btn_attendance_next)
     public boolean setNextAvatar(View view, MotionEvent event) {
         revealX = (int) event.getRawX();
         revealY = (int) event.getY();
@@ -187,7 +191,7 @@ public class FragmentChildAttendance extends Fragment implements ContractChildAt
         return getActivity().onTouchEvent(event);
     }*/
 
-    @OnClick(R.id.btn_attendance_next)
+    @Click(R.id.btn_attendance_next)
     public void setNext(View v) {
         ArrayList<Student> checkedStds = new ArrayList<>();
         for (int i = 0; i < students.size(); i++) {
@@ -341,6 +345,20 @@ public class FragmentChildAttendance extends Fragment implements ContractChildAt
                 }
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mediaPlayer.stop();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+
     }
 
 }

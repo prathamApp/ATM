@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_fragment_certificate"
     android:layout_width="match_parent"
@@ -59,7 +60,9 @@
                         android:text="Profile Name"
                         android:textColor="@color/colorBlackTransparentDark"
                         android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeMaxTextSize="@dimen/_20sdp"
+                        app:autoSizeMinTextSize="@dimen/_15sdp" />
 
 
                     <LinearLayout
@@ -86,7 +89,10 @@
                                 android:gravity="center"
                                 android:text="Total"
                                 android:textSize="@dimen/_10sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                app:autoSizeMaxTextSize="@dimen/_20sdp"
+                                app:autoSizeMinTextSize="@dimen/_15sdp"
+                                app:autoSizeTextType="uniform" />
 
                             <TextView
                                 android:id="@+id/tv_total_cnt"
@@ -286,15 +292,20 @@
                     android:layout_weight="0.6">
 
                     <ScrollView
-                        android:layout_gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ll_marks">
+                        android:layout_below="@+id/ll_marks"
+                        android:layout_gravity="center">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_rating"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_3sdp" />
 
                             <LinearLayout
                                 android:id="@+id/ll_qiestions"
@@ -303,7 +314,8 @@
                                 android:layout_centerInParent="true"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="@dimen/_3sdp"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
