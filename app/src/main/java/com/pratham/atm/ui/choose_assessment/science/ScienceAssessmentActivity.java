@@ -30,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -159,6 +160,8 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
     TextView tv_timer;
     @ViewById(R.id.btn_save_Assessment)
     Button btn_save_Assessment;
+    @ViewById(R.id.btn_next_arrow)
+    ImageButton btn_next_arrow;
 
 
     @ViewById(R.id.btn_submit)
@@ -238,7 +241,7 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
     public void init() {
 //        startKioskService();
 
-        activity = new MainActivity();
+//        activity = new MainActivity();
 
         assessmentSession = "" + UUID.randomUUID().toString();
 //        Assessment_Constants.assessmentSession=assessmentSession;
@@ -253,10 +256,12 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
         mediaProgressDialog = new ProgressDialog(this);
 //        showSelectTopicDialog();
         GradientDrawable bgShape = (GradientDrawable) btn_save_Assessment.getBackground();
-        bgShape.setCornerRadius(10);
+//        bgShape.setCornerRadius(10);
         bgShape.setColor(Assessment_Utility.selectedColor);
 //        btn_save_Assessment.setBackgroundColor(Assessment_Utility.selectedColor);
-
+        GradientDrawable bgShape1 = (GradientDrawable) btn_next_arrow.getBackground();
+//        bgShape1.setCornerRadius(10);
+        bgShape1.setColor(Assessment_Utility.selectedColor);
         if (Assessment_Constants.VIDEOMONITORING) {
             frame_video_monitoring.setVisibility(View.VISIBLE);
 //            btn_save_Assessment.setVisibility(View.GONE);
@@ -1051,11 +1056,13 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
                     showDoneAnimation();
                 } else {
 //                    if (!Assessment_Constants.VIDEOMONITORING) {
-                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.shape_scrolling_view_checked));
+                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.shape_left_rounded));
                     GradientDrawable bgShape = (GradientDrawable) btn_save_Assessment.getBackground();
-                    bgShape.setCornerRadius(10);
+//                    bgShape.setCornerRadius(10);
                     bgShape.setColor(Assessment_Utility.selectedColor);
-
+                    GradientDrawable bgShape1 = (GradientDrawable) btn_next_arrow.getBackground();
+//                    bgShape1.setCornerRadius(10);
+                    bgShape1.setColor(Assessment_Utility.selectedColor);
                     btn_save_Assessment.setText("Next Question");
 //                    btn_save_Assessment.setImageDrawable(getResources().getDrawable(R.drawable.ic_right_arrow));
 //                        btn_save_Assessment.setVisibility(View.VISIBLE);
@@ -1171,27 +1178,32 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
         animation = AnimationUtils.loadAnimation(this, R.anim.pop_out);
         btn_save_Assessment.startAnimation(animation);
         btn_save_Assessment.setVisibility(View.GONE);
+        btn_next_arrow.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                btn_save_Assessment.setBackgroundResource(android.R.color.transparent);
+//                btn_save_Assessment.setBackgroundResource(android.R.color.transparent);
                 if (scienceQuestionList.size() == (queCnt + 1)) {
 //                    btn_save_Assessment.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_circle_36dp));
-                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.correct_bg));
+//                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.correct_bg));
 
                     btn_save_Assessment.setText("Done");
+                    btn_next_arrow.setVisibility(View.GONE);
                 } else {
 //                    btn_save_Assessment.setImageDrawable(getResources().getDrawable(R.drawable.ic_right_arrow));
                     btn_save_Assessment.setText("Next Question");
-                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.shape_scrolling_view_checked));
+                    btn_save_Assessment.setBackground(getResources().getDrawable(R.drawable.shape_left_rounded));
                     GradientDrawable bgShape = (GradientDrawable) btn_save_Assessment.getBackground();
-                    bgShape.setCornerRadius(10);
+//                    bgShape.setCornerRadius(10);
                     bgShape.setColor(Assessment_Utility.selectedColor);
-
+                    GradientDrawable bgShape1 = (GradientDrawable) btn_next_arrow.getBackground();
+//                    bgShape1.setCornerRadius(10);
+                    bgShape1.setColor(Assessment_Utility.selectedColor);
                 }
                 Animation animation = AnimationUtils.loadAnimation(ScienceAssessmentActivity.this, R.anim.pop_in);
                 if (!Assessment_Constants.VIDEOMONITORING) {
                     btn_save_Assessment.setVisibility(View.VISIBLE);
+                    btn_next_arrow.setVisibility(View.VISIBLE);
                     btn_save_Assessment.startAnimation(animation);
                     if (scienceQuestionList.size() == (queCnt + 1))
                         btn_submit.setVisibility(View.GONE);
@@ -1199,6 +1211,7 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
                     if (scienceQuestionList.size() == (queCnt + 1))
                         btn_submit.setVisibility(View.VISIBLE);
                     btn_save_Assessment.setVisibility(View.VISIBLE);
+                    btn_next_arrow.setVisibility(View.VISIBLE);
 
                 }
                 showSubmit = true;
@@ -1790,7 +1803,7 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
         }
     }
 
-    @Click(R.id.btn_save_Assessment)
+    @Click({R.id.btn_save_Assessment, R.id.btn_next_arrow})
     public void saveAssessment() {
         if (queCnt < scienceQuestionList.size() - 1)
             nextClick();
@@ -2104,6 +2117,7 @@ public class ScienceAssessmentActivity extends BaseActivity implements DiscreteS
             tv_timer.setTextColor(Color.BLACK);
             frame_video_monitoring.setVisibility(View.GONE);
             btn_save_Assessment.setVisibility(View.VISIBLE);
+            btn_next_arrow.setVisibility(View.VISIBLE);
             Toast.makeText(this, "video monitoring not prepared", Toast.LENGTH_LONG).show();
         }
     }

@@ -311,25 +311,26 @@
 
                 <Button
                     android:id="@+id/btn_save_Assessment"
-                    android:layout_toLeftOf="@id/btn_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:background="@drawable/shape_scrolling_view_checked"
-                    android:elevation="@dimen/_5sdp"
+                    android:layout_toLeftOf="@id/btn_next_arrow"
+                    android:background="@drawable/shape_left_rounded"
                     android:padding="@dimen/_8sdp"
                     android:text="Next Question"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/btn_next"
+                    android:id="@+id/btn_next_arrow"
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:src="@drawable/ic_right_arrow"/>
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:background="@drawable/shape_right_rounded"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_swipe_right_caret" />
             </RelativeLayout>
 
             <!--            <ProgressBar

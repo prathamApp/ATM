@@ -33,6 +33,7 @@ import com.pratham.atm.AssessmentApplication;
 import com.pratham.atm.R;
 import com.pratham.atm.async.PushDataToServer;
 import com.pratham.atm.custom.FastSave;
+import com.pratham.atm.custom.LockNavigation.MainActivity;
 import com.pratham.atm.database.AppDatabase;
 import com.pratham.atm.database.BackupDatabase;
 import com.pratham.atm.domain.AssessmentPaperForPush;
@@ -87,10 +88,12 @@ public class SplashActivity extends SplashSupportActivity implements SplashContr
     @Bean(PushDataToServer.class)
     PushDataToServer pushDataToServer;
     public static boolean firstPause = true, fragmentBottomOpenFlg = false, fragmentBottomPauseFlg = false, fragmentAddStudentPauseFlg = false, fragmentAddStudentOpenFlg = false;
+    MainActivity activity;
 
     @AfterViews
     public void init() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        activity = new MainActivity();
 
         dialog = new ProgressDialog(this);
         fpath = "";
@@ -718,6 +721,8 @@ public class SplashActivity extends SplashSupportActivity implements SplashContr
     public void onStart() {
         super.onStart();
         isActivityRunning = true;
+        if (activity != null)
+            activity.init(this, getApplication());
     }
 
     private void show_STT_Dialog() {

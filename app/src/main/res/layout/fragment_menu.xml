@@ -156,6 +156,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
+        android:visibility="gone"
         android:background="@drawable/qr_btn_bg">
 
         <ImageButton

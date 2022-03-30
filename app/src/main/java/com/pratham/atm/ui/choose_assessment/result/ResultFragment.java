@@ -48,6 +48,8 @@ public class ResultFragment extends Fragment implements ResultListener {
     TextView tv_topic;
     @ViewById(R.id.tv_subject)
     TextView tv_subject;
+    @ViewById(R.id.tv_name)
+    TextView tv_name;
     @ViewById(R.id.btn_done)
     Button btn_done;
     @ViewById(R.id.toolbar)
@@ -92,6 +94,7 @@ public class ResultFragment extends Fragment implements ResultListener {
 
 //        presenter = new ResultPresenter(getActivity());
         String studentName = presenter.getStudent(studentId);
+        tv_name.setText(studentName);
         mToolbar.setTitle(studentName);
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setSubtitleTextColor(Color.WHITE);

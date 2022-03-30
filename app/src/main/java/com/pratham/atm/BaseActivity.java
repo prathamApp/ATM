@@ -395,6 +395,7 @@ public class BaseActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
                 pushDialog.dismiss();
             }
